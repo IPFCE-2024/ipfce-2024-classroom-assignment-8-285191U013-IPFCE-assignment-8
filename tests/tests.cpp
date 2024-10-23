@@ -12,8 +12,8 @@ extern "C" {
 TEST_CASE("initialize", "[queue]") {
   queue q;
   initialize(&q);
-  REQUIRE(q.front == NULL);
-  REQUIRE(q.rear == NULL);
+  REQUIRE(q.front == nullptr);
+  REQUIRE(q.rear == nullptr);
   REQUIRE(q.size == 0);
 }
 
@@ -53,14 +53,14 @@ TEST_CASE("enqueue", "[queue]") {
   const int x0 = 1;
   const int x1 = 2;
   enqueue(&q, x0);
-  REQUIRE(q.front != NULL);
-  REQUIRE(q.rear != NULL);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
   REQUIRE(q.front->data == x0);
   REQUIRE(q.size == 1);
 
   enqueue(&q, x1);
-  REQUIRE(q.front != NULL);
-  REQUIRE(q.rear != NULL);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
   REQUIRE(q.front->data == x0);
   REQUIRE(q.rear->data == x1);
   REQUIRE(q.size == 2);
@@ -102,16 +102,16 @@ TEST_CASE("dequeue", "[queue]") {
 
   const int y0 = dequeue(&q);
   REQUIRE(y0 == x0);
-  REQUIRE(q.front != NULL);
-  REQUIRE(q.rear != NULL);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
   REQUIRE(q.front->data == x1);
   REQUIRE(q.rear->data == x1);
   REQUIRE(q.size == 1);
 
   const int y1 = dequeue(&q);
   REQUIRE(y1 == x1);
-  REQUIRE(q.front == NULL);
-  REQUIRE(q.rear == NULL);
+  REQUIRE(q.front == nullptr);
+  REQUIRE(q.rear == nullptr);
   REQUIRE(q.size == 0);
 }
 
