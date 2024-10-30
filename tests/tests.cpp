@@ -153,6 +153,114 @@ TEST_CASE("queue", "[queue]") {
   REQUIRE(xs[4] == ys[4]);
 }
 
+TEST_CASE("enqueueStack", "[queue]") {
+  queue q;
+  q.front = NULL;
+  q.rear = NULL;
+  q.size = 0;
+  const int x0 = 1;
+  const int x1 = 2;
+  enqueueStack(&q, x0);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
+  REQUIRE(q.front->data == x0);
+  REQUIRE(q.size == 1);
+
+  enqueueStack(&q, x1);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
+  REQUIRE(q.front->data == x0);
+  REQUIRE(q.rear->data == x1);
+  REQUIRE(q.size == 2);
+}
+
+TEST_CASE("dequeueStack", "[queue]") {
+  queue q;
+  q.front = NULL;
+  q.rear = NULL;
+  q.size = 0;
+  const int x0 = 1;
+  const int x1 = 2;
+
+  node *n0 = (node *)malloc(sizeof(node));
+  if (!n0) {
+    fprintf(stderr, "%s:%d Allocation with malloc() failed.\n", __FILE__,
+            __LINE__);
+    exit(1);
+  }
+  n0->data = x0;
+  n0->next = NULL;
+  node *n1 = (node *)malloc(sizeof(node));
+  if (!n1) {
+    fprintf(stderr, "%s:%d Allocation with malloc() failed.\n", __FILE__,
+            __LINE__);
+    exit(1);
+  }
+  n1->data = x1;
+  n1->next = NULL;
+  // enqueue(&q, x0);
+  q.front = n0;
+  q.rear = n0;
+  q.size = 1;
+
+  // enqueue(&q, x1);
+  q.rear = n1;
+  q.front->next = n1;
+  q.size = 2;
+
+  const int y0 = dequeueStack(&q);
+  REQUIRE(y0 == x0);
+  REQUIRE(q.front != nullptr);
+  REQUIRE(q.rear != nullptr);
+  REQUIRE(q.front->data == x1);
+  REQUIRE(q.rear->data == x1);
+  REQUIRE(q.size == 1);
+
+  const int y1 = dequeueStack(&q);
+  REQUIRE(y1 == x1);
+  REQUIRE(q.front == nullptr);
+  REQUIRE(q.rear == nullptr);
+  REQUIRE(q.size == 0);
+}
+
+TEST_CASE("queueStack", "[queue]") {
+  queue q;
+  initialize(&q);
+  REQUIRE(empty(&q));
+  const int x0 = 2;
+  const int x1 = 3;
+  enqueueStack(&q, x0);
+  REQUIRE(!empty(&q));
+  enqueueStack(&q, x1);
+  REQUIRE(!empty(&q));
+  const int y0 = dequeueStack(&q);
+  REQUIRE(!empty(&q));
+  const int y1 = dequeueStack(&q);
+  REQUIRE(empty(&q));
+  REQUIRE(!full(&q));
+
+  REQUIRE(x0 == y0);
+  REQUIRE(x1 == y1);
+
+  int xs[] = {1, 2, 3, 4, 5};
+  const int len = sizeof(xs) / sizeof(int);
+  for (int i = 0; i < len; i++) {
+    enqueueStack(&q, xs[i]);
+  }
+
+  int ys[len];
+  for (int i = 0; i < len; i++) {
+    ys[i] = dequeueStack(&q);
+  }
+
+  REQUIRE(empty(&q));
+  REQUIRE(xs[0] == ys[0]);
+  REQUIRE(xs[1] == ys[1]);
+  REQUIRE(xs[2] == ys[2]);
+  REQUIRE(xs[3] == ys[3]);
+  REQUIRE(xs[4] == ys[4]);
+}
+
 node *ll_create_node(int x) {
   node *n = (node *)malloc(sizeof(node));
   if (!n) {
